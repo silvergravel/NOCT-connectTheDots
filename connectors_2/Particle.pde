@@ -10,9 +10,11 @@ class Particle {
   float t;
   float G;
   color c;
+  String index = "";
 
-  Particle(PVector location_, float t_) {
+  Particle(PVector location_, float t_, String index_) {
 
+    index = index_;
     location = location_;
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
@@ -61,6 +63,7 @@ class Particle {
 
     fill(c);
     ellipse(location.x, location.y, mass*2, mass*2);
+    text(index,location.x+3,location.y+3);
   }
 
   void checkEdges() {

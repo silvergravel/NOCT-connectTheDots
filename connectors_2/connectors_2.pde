@@ -2,7 +2,7 @@ ArrayList<Particle> particles;
 
 PVector location;
 float t;
-int noOfParticles = 80;
+int noOfParticles = 3;
 
 //vars to find nearest neighbour
 
@@ -26,7 +26,7 @@ void setup() {
     location = new PVector(random(width), random(height));
     float t = random(0, 10000);
 
-    particles.add(new Particle(location, t));
+    particles.add(new Particle(location, t, str(i)));
 
     lines.add(new PVector(0, 0));
 
@@ -64,7 +64,7 @@ void draw() {
       noStroke();
     } else {
       stroke(140);
-      retreatLine(p.location, i);
+      retreatLine(p.location, closestNeighbour.location, i);
       noStroke();
     }
 
@@ -83,29 +83,34 @@ void drawLine(PVector startPoint, PVector endPoint, int i_) {
   maxLength = PVector.sub(endPoint, startPoint);
   incr = PVector.sub(maxLength, line);
   incr.div(8);
-  pushMatrix();
-  translate(startPoint.x, startPoint.y);
-  line(0, 0, line.x, line.y);
-  popMatrix();
-  if (line.mag() < maxLength.mag()) {
+  
 
+  if (line.mag() < maxLength.mag()) {
+    line(startPoint.x, startPoint.y, startPoint.x + line.x, startPoint.y + line.y);
     line.add(incr);
+  } else if (line.mag() >= maxLength.mag()) {
+
+    line(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+    
+    println("line is " + line);
   }
 }
 
 
-void retreatLine(PVector startPoint, int i_) {
+void retreatLine(PVector startPoint, PVector endPoint, int i_) {
   PVector noLine = new PVector(0, 0);
   PVector line = lines.get(i_);
+  if(line.mag() > 0){
+  println(i_, line);
+  }
   incr = PVector.sub(noLine, line);
   incr.div(8);
-  pushMatrix();
-  translate(startPoint.x, startPoint.y);
-  line(0, 0, line.x, line.y);
-  popMatrix();
+    line(startPoint.x, startPoint.y, startPoint.x + line.x, startPoint.y + line.y);
+  
   if (line.mag() > noLine.mag()) {
-
+   // println("line Now is " + line);
     line.add(incr);
+    //println(line.mag());
   }
 
   //line.x = 0;
